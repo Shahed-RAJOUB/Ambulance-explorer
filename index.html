@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ambulance Explorer – Interactive 3D Equipment Guide</title>
+    <meta
+      name="description"
+      content="Explore the inside of an ambulance in 3D. Click on equipment to open details, 3D tool previews and interactive checklists."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <main id="app">
+      <!-- Main 3D scene: ambulance interior -->
+      <canvas id="scene-canvas" aria-label="3D view of the ambulance interior"></canvas>
+
+      <!-- Hotspot markers are injected here and positioned every frame -->
+      <div id="hotspot-layer" aria-live="polite"></div>
+
+      <!-- Landing / intro overlay -->
+      <section id="landing" class="landing">
+        <div class="landing-content">
+          <span class="eyebrow">Interactive 3D Guide</span>
+          <h1>Ambulance <span class="grad">Explorer</span></h1>
+          <p>Step inside the ambulance, discover every piece of equipment and keep your checklists up to date.</p>
+          <button id="enter-btn" class="btn btn-primary btn-lg">
+            <span>Step inside</span>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M13.2 5.3 19.9 12l-6.7 6.7-1.4-1.4 4.3-4.3H4v-2h12.1l-4.3-4.3z"/></svg>
+          </button>
+        </div>
+        <div class="landing-loader" id="landing-loader">
+          <div class="loader-bar"><div class="loader-fill" id="loader-fill"></div></div>
+          <span id="loader-text">Loading scene…</span>
+        </div>
+      </section>
+
+      <!-- Top toolbar -->
+      <header id="toolbar" class="toolbar glass hidden">
+        <div class="brand">
+          <span class="brand-dot"></span>
+          <span>Ambulance Explorer</span>
+        </div>
+        <div class="toolbar-actions">
+          <div class="mode-switch" role="group" aria-label="Mode">
+            <button id="mode-view" class="mode-btn active" aria-pressed="true">View</button>
+            <button id="mode-edit" class="mode-btn" aria-pressed="false">Edit</button>
+          </div>
+          <button id="btn-inventory" class="icon-btn" title="Equipment list">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M4 6h2v2H4zm4 0h12v2H8zM4 11h2v2H4zm4 0h12v2H8zm-4 5h2v2H4zm4 0h12v2H8z"/></svg>
+          </button>
+          <button id="btn-reset" class="icon-btn" title="Reset view">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
+          </button>
+          <button id="btn-export" class="icon-btn" title="Export hotspots (JSON)">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 3 7 8h3v6h4V8h3zM5 18h14v2H5z"/></svg>
+          </button>
+          <button id="btn-import" class="icon-btn" title="Import hotspots (JSON)">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="m12 15 5-5h-3V4h-4v6H7zM5 18h14v2H5z"/></svg>
+          </button>
+          <input id="import-input" type="file" accept="application/json" hidden />
+        </div>
+      </header>
+
+      <!-- Edit mode hint -->
+      <div id="edit-banner" class="edit-banner glass hidden">
+        <span class="pulse-dot"></span>
+        <span id="edit-banner-text">Edit mode – click anywhere in the ambulance to place a hotspot</span>
+        <button id="edit-banner-cancel" class="link-btn hidden">Cancel</button>
+      </div>
+
+      <!-- Equipment / hotspot list -->
+      <aside id="inventory" class="inventory glass" aria-label="Equipment list">
+        <div class="inventory-head">
+          <h2>Equipment</h2>
+          <button id="inventory-close" class="icon-btn small" title="Close">✕</button>
+        </div>
+        <ul id="inventory-list"></ul>
+      </aside>
+
+      <!-- Popup (modal) container -->
+      <div id="popup-root"></div>
+
+      <!-- Toasts -->
+      <div id="toasts" class="toasts" role="status"></div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
